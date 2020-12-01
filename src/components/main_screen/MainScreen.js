@@ -4,11 +4,13 @@ import Menu from "./Menu";
 
 
 
+
 function MainScreen(){
     return(
         <div>
         <User/>
         <Menu/>
+
         
         </div>
 
