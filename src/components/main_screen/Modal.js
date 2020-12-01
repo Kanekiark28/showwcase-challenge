@@ -1,7 +1,9 @@
+import React,{useState} from "react";
 import us_institutions from "../../data/us_institutions.json";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {majors,degrees,dates} from "../../data/data";
+import Education from "./Education";
 
 const MODAL_STYLES = {
   position: "fixed",
@@ -25,7 +27,23 @@ const OVERLAY_STYLE = {
 };
 
 
-function Modal({ open, children, onClose }) {
+function Modal({ open, children, onClose, getEducation }) {
+
+    const [uniName, setUniName] = useState('')
+    const [degree, setDegree] = useState('')
+    const [major, setMajor] = useState('')
+    const [startDate, setStart] = useState('')
+    const [endDate, setEnd] = useState('')
+
+    const [education, addEducation] = useState([]);
+    const newArray = []
+    const onAddButtonClick = event => {
+        education.push(<Education university={uniName} degree={degree} major={major} start={startDate} end={endDate} education={education}/>)
+        addEducation(education);
+        getEducation(education);
+    }
+
+
   if (!open) return null;
   return (
     <>
@@ -35,6 +53,9 @@ function Modal({ open, children, onClose }) {
               <Autocomplete
                 id="university"
                 options={us_institutions}
+                onChange = {(event,newUni) => {
+                    setUniName(newUni)
+                }}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -47,6 +68,9 @@ function Modal({ open, children, onClose }) {
             <Autocomplete
             id="degree"
             options={degrees}
+            onChange = {(event, newDeg) => {
+                setDegree(newDeg)
+            }}
             renderInput={(params) => (
                 <TextField
                 {...params}
@@ -61,6 +85,9 @@ function Modal({ open, children, onClose }) {
             <Autocomplete
             id="major"
             options={majors}
+            onChange = {(event, newMaj) => {
+                setMajor(newMaj)
+            }}
             renderInput={(params) => (
                 <TextField
                 {...params}
@@ -74,6 +101,9 @@ function Modal({ open, children, onClose }) {
             <Autocomplete
             id="start"
             options={dates}
+            onChange = {(event, newStart) => {
+                setStart(newStart)
+            }}
             renderInput={(params) => (
                 <TextField
                 {...params}
@@ -87,6 +117,9 @@ function Modal({ open, children, onClose }) {
             <Autocomplete
             id="enddate"
             options={dates}
+            onChange = {(event, newEnd) => {
+                setEnd(newEnd)
+            }}
             renderInput={(params) => (
                 <TextField
                 {...params}
@@ -99,7 +132,7 @@ function Modal({ open, children, onClose }) {
 
             <button onClick={onClose}> Close</button>
             {children}
-            <button> Add </button>
+            <button onClick={onAddButtonClick}> Add </button>
         </div>
       </div>
     </>
